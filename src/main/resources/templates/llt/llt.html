@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{fragments/general.html :: headerfragment}"></div>
+<body>
+<div th:replace="~{fragments/general.html :: navfragment}"></div>
+<div class = "container">
+  <div class = "row">
+    <h1>List of All Low Level Tasks</h1>
+  </div>
+
+  <div class="btn-group" style="margin-bottom: 20px;">
+    <button type="button" class="btn btn-primary" onclick="location.href='/lowleveltasks/new'">Add task</button>&nbsp;&nbsp;
+    <button type="button" class="btn btn-danger" onclick="location.href='/lowleveltasks/deleteall'">Delete All</button>&nbsp;&nbsp;
+  </div>
+  <div>
+    <label for="sortOptions">Sort By:</label>
+    <select id="sortOptions" onchange="redirectToSelectedLink(this)">
+      <option value="">Select an option</option>
+      <option value="/lowleveltasks/sorted">LLT Name</option>
+      <option value="/lowleveltasks">LLT ID</option>
+      <option value="/lowleveltasks/hltnamesorted">HLT Name</option>
+      <option value="/lowleveltasks/hltidsorted">HLT ID</option>
+      <option value="/lowleveltasks/tagnamesorted">TaskTag Name</option>
+      <option value="/lowleveltasks/tagidsorted">TaskTag ID</option>
+    </select>&nbsp;&nbsp;
+  </div>
+  <br>
+  <table class = "table table-striped table-bordered">
+    <thead class="table-dark">
+    <tr>
+      <th>LLT ID</th>
+      <th>LLT Name</th>
+      <th>HLT ID</th>
+      <th>HLT Name</th>
+      <th>Tag ID</th>
+      <th>Tag Name</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task:${lowleveltasks}">
+      <td th:text="${task.lowLevelTaskID}"></td>
+      <td th:text="${task.lowLevelTaskName}"></td>
+      <td th:text="${task.highLevelTaskID}"></td>
+      <td th:text="${task.highLevelTaskName}"></td>
+      <td th:text="${task.taskTagID}"></td>
+      <td th:text="${task.taskTagName}"></td>
+      <td>
+        <a th:href="@{/lowleveltasks/edit/{id}(id=${task.lowLevelTaskID})}" class="btn btn-primary">Update</a>
+        <a th:href="@{/lowleveltask/delete/{id}(id=${task.lowLevelTaskID})}" class="btn btn-danger">Delete</a>
+        <a th:href="@{/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks(lid=${task.lowLevelTaskID},hid=${task.highLevelTaskID})}" class="btn btn-info">Low Level Sub Tasks</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

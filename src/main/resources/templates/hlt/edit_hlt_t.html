@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{fragments/general.html :: headerfragment}"></div>
+<body>
+<div th:replace="~{fragments/general.html :: navfragment}"></div>
+<br>
+<div class = "container">
+  <div class = "row">
+    <h6>
+      <a th:href="@{/systems}" style="text-decoration: none;color: black;" th:text="${sister.sisterName}"></a> &gt;
+      <a th:href="@{/systems/{id}/tasks(id=${sister.sisterId})}" style="text-decoration: none;color: black;" th:text="${t.taskName}"></a> &gt;&nbsp;High Level Task
+    </h6>
+  </div>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 container justify-container-center card">
+      <h1 class="text-center">Update High Level Task</h1>
+      <div class="card-body">
+        <form th:action="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}(id=${sister.sisterId},tid=${t.taskID},hid=${hlt.highLevelTaskID})}" th:object="${hlt}" method="post">
+          <div class="form-group">
+            <label>High Level Task Name</label>
+            <input
+                    type="text"
+                    name="name"
+                    th:field="*{highLevelTaskName}"
+                    class="form-control"
+                    placeholder="Enter Task Name:"/>
+            <label>Select Task</label>
+            <br>
+            <select name="task" class="form-select">
+              <option th:each="task : ${tasks}" th:value="${task.taskID}" th:selected="${hlt.task.taskID == task.taskID}" th:text="${task.taskName}"></option>
+            </select>
+          </div>
+          <br>
+          <div class="box-footer">
+            <button type="submit" class="btn btn-primary">
+              Submit
+            </button>
+            <button type="button" class="btn btn-danger" onclick="history.go(-1)">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

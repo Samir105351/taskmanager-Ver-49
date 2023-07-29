@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{fragments/general.html :: headerfragment}"></div>
+<body>
+<div th:replace="~{fragments/general.html :: navfragment}"></div>
+<br>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 container justify-container-center card">
+      <h1 class="text-center">Update Low Level Task</h1>
+      <div class="card-body">
+        <form th:action="@{/lowleveltasks/{id} (id=${llt.lowLevelTaskID})}" th:object="${llt}" method="post">
+          <div class="form-group">
+            <label>Low Level Task Name</label>
+            <input
+                    type="text"
+                    name="name"
+                    th:field="*{lowLevelTaskName}"
+                    class="form-control"
+                    placeholder="Enter Task Name:"/>
+            <label>Select High Level Task</label>
+            <br>
+            <select name="highLevelTask" class="form-select">
+              <option th:each="hlt : ${hlts}" th:value="${hlt.highLevelTaskID}" th:selected="${llt.highLevelTask.highLevelTaskID == hlt.highLevelTaskID}" th:text="${hlt.highLevelTaskName}"></option>
+            </select>
+          </div>
+          <br>
+          <div class="box-footer">
+            <button type="submit" class="btn btn-primary">
+              Submit
+            </button>
+            <button type="button" class="btn btn-danger" onclick="history.go(-1)">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
