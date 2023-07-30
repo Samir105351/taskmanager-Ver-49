@@ -1,37 +1,96 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<link rel="stylesheet" th:href="@{/css/copy.css}">
-<script type="text/javascript" th:src="@{/js/copy.js}"></script>
-<div th:replace="~{fragments/general.html :: headerfragment}"></div>
+<head>
+    <link rel="stylesheet" th:href="@{/css/copy.css}">
+    <script type="text/javascript" th:src="@{/js/copy.js}"></script>
+</head>
 <body>
+<div th:replace="~{fragments/general.html :: headerfragment}"></div>
+
 <div th:replace="~{fragments/general.html :: navfragment}"></div>
-<br>
+
+<!-- Recursive Thymeleaf fragment to handle nested task lists -->
+<div th:fragment="taskListHierarchy(taskLists)">
+    <ul>
+        <li th:each="taskList : ${taskLists}">
+            <span th:text="${taskList.taskName}"></span>
+            <ul th:if="${taskList.taskLists}" class="nested-list">
+                <li th:replace="~{tree/childTaskList :: taskListHierarchy(taskLists=${taskList.taskLists})}"></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!-- End of recursive Thymeleaf fragment -->
+
+<!-- Task list hierarchy starts here -->
 <div class="container">
-    <h2 class="text-left">Copy:</h2>
-    <br>
     <div class="row">
+        <!-- View 1 -->
         <div class="col-md-6">
-            <h3>Business Suitable View</h3>
-            <button class="copy-btn"
-                    onclick="copyToClipboard(document.querySelector('#tree1').innerText, document.querySelector('#tooltip1'))">Copy</button>
+            <div class="card">
+                <div class="card-body position-relative">
+                    <br>
+                    <h3 class="text-left">View 1</h3>
+                    <!-- Copy button for View 1 (Copy List) -->
+                    <button class="btn btn-primary"
+                            style="position: absolute; top: 10px; right: 20px;"
+                            onclick="copyListToClipboard()">
+                        Copy List
+                    </button>
+                    <div class="bg-white p-3 rounded">
+                        <ul>
+                            <li th:each="sisterTaskList : ${taskList.taskLists}" class="nested-list">
+                                <span th:text="${sisterTaskList.taskName}"></span>
+                                <ul>
+                                    <li th:each="taskTaskList : ${sisterTaskList.taskLists}" class="nested-list">
+                                        <span th:text="${taskTaskList.taskName}"></span>
+                                        <ul th:if="${taskTaskList.taskLists}" class="nested-list">
+                                            <!-- Recursive fragment to display high-level and low-level tasks -->
+                                            <li th:replace="~{tree/childTaskList :: taskListHierarchy(taskLists=${taskTaskList.taskLists})}"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="tooltip-list" class="tooltip">Copied!</div>
+        </div>
+        <!-- View 2 -->
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                        <pre id="tree1" class="bg-light p-3 rounded">
+                    <!-- Remove the margin from the h3 -->
+                    <br>
+                    <h3 class="text-left mb-0">View 2</h3>
+                    <!-- Copy button for View 2 (Copy <pre>) -->
+                    <button class="btn btn-primary copy-btn-top-right"
+                            onclick="copyPreToClipboard('tree1', 'tooltip1')">
+                        Copy
+                    </button>
+                    <pre id="tree1" class="bg-white p-3 rounded" style="position: relative;">
                             <code th:text="${tree1}" class="text-dark"></code>
                         </pre>
                 </div>
             </div>
             <div id="tooltip1" class="tooltip">Copied!</div>
         </div>
-        <div class="col-md-6">
-            <h3>Indented Tree View</h3>
-            <button class="copy-btn"
-                    onclick="copyToClipboard(document.querySelector('#tree').innerText, document.querySelector('#tooltip2'))">Copy</button>
+        <!-- View 3 -->
+        <div class="col-md-6 mt-3">
             <div class="card">
                 <div class="card-body">
-                        <pre id="tree" class="bg-light p-3 rounded">
+                    <!-- Remove the margin from the h3 -->
+                    <br>
+                    <h3 class="text-left mb-0">View 3</h3>
+                    <!-- Copy button for View 3 (Copy <pre>) -->
+                    <button class="btn btn-primary copy-btn-top-right"
+                            onclick="copyPreToClipboard('tree', 'tooltip2')">
+                        Copy
+                    </button>
+                    <pre id="tree" class="bg-white p-3 rounded" style="position: relative;">
                             <code th:text="${tree}" class="text-dark"></code>
-                        </pre>
+                    </pre>
                 </div>
             </div>
             <div id="tooltip2" class="tooltip">Copied!</div>

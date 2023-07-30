@@ -1,0 +1,12 @@
+<!-- Recursive Thymeleaf fragment to handle nested task lists -->
+<div th:fragment="taskListHierarchy(taskLists)" xmlns:th="http://www.w3.org/1999/xhtml">
+  <ul>
+    <li th:each="taskList : ${taskLists}">
+      <span th:text="${taskList.taskName}"></span>
+      <ul class="nested-list" th:if="${taskList.taskLists}">
+        <li th:replace="~{tree/childTaskList :: taskListHierarchy(taskLists=${taskList.taskLists})}"></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<!-- End of recursive Thymeleaf fragment -->
