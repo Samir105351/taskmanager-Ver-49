@@ -170,4 +170,53 @@ public class TaskListServiceImpl implements TaskListService {
             }
         }
     }
+    @Override
+    public String getHirearchicalTaskListStringWithAnotherStyle(TaskList rootTaskList) {
+        StringBuilder resultBuilder = new StringBuilder();
+        getHierarchicalTaskListStringWithAnotherStyleHelper(rootTaskList, resultBuilder, 0, new int[]{1, 1, 1, 1});
+        return resultBuilder.toString();
+    }
+
+    // Helper method for generating the hierarchical task list string with different styles for children
+    private void getHierarchicalTaskListStringWithAnotherStyleHelper(TaskList taskList, StringBuilder resultBuilder, int indentationLevel, int[] counters) {
+        if (taskList == null) {
+            return;
+        }
+
+        String currentTaskName = taskList.getTaskName();
+
+        // Choose the appropriate prefix based on the indentation level and style
+        String prefix;
+        if (indentationLevel == 0) {
+            prefix = "";
+        } else if (indentationLevel == 1) {
+            prefix = "•";
+            counters[0]++;
+            counters[1] = 1;
+            counters[2] = 1;
+            counters[3] = 1;
+        } else if (indentationLevel == 2) {
+            prefix = "  ◦ ";
+            counters[1]++;
+            counters[2] = 1;
+            counters[3] = 1;
+        } else if (indentationLevel == 3) {
+            prefix = "    □ ";
+            counters[2]++;
+            counters[3] = 1;
+        } else {
+            prefix = "      □ ";
+        }
+
+        // Append the prefix and the task name to the resultBuilder
+        resultBuilder.append("  ".repeat(indentationLevel)).append(prefix).append(currentTaskName).append("\n");
+
+        // Recursively process the children task lists
+        List<TaskList> subTaskLists = taskList.getTaskLists();
+        if (subTaskLists != null) {
+            for (TaskList subTaskList : subTaskLists) {
+                getHierarchicalTaskListStringWithAnotherStyleHelper(subTaskList, resultBuilder, indentationLevel + 1, counters);
+            }
+        }
+    }
 }

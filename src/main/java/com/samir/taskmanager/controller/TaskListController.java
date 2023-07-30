@@ -15,8 +15,7 @@ public class TaskListController {
         model.addAttribute("taskList",taskListService.getTaskLists());
         model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTaskLists()));
         model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTaskLists()));
-        System.out.println(taskListService.getHierarchicalTaskListString(taskListService.getTaskLists()));
-        System.out.println(taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTaskLists()));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTaskLists()));
         return "tree/tree";
     }
 }

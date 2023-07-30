@@ -16,7 +16,6 @@ function showTooltip(tooltip) {
 }
 
 function copyListToClipboard() {
-    const listText = document.querySelector(".bg-white").innerText; // Target the <ul> content
     copyToClipboard(listText, document.querySelector('#tooltip-list'));
 }
 

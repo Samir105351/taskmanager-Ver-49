@@ -4,6 +4,9 @@
     <link rel="stylesheet" th:href="@{/css/copy.css}">
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
 </head>
+<script th:inline="javascript">
+    const listText = [[${treeStyled}]];
+</script>
 <body>
 <div th:replace="~{fragments/general.html :: headerfragment}"></div>
 
@@ -30,12 +33,13 @@
             <div class="card">
                 <div class="card-body position-relative">
                     <br>
+                    <br>
                     <h3 class="text-left">View 1</h3>
                     <!-- Copy button for View 1 (Copy List) -->
                     <button class="btn btn-primary"
                             style="position: absolute; top: 10px; right: 20px;"
                             onclick="copyListToClipboard()">
-                        Copy List
+                        Copy
                     </button>
                     <div class="bg-white p-3 rounded">
                         <ul>
@@ -52,6 +56,7 @@
                                 </ul>
                             </li>
                         </ul>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -62,7 +67,7 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Remove the margin from the h3 -->
-                    <br>
+                    <h3>&nbsp;</h3>
                     <h3 class="text-left mb-0">View 2</h3>
                     <!-- Copy button for View 2 (Copy <pre>) -->
                     <button class="btn btn-primary copy-btn-top-right"
@@ -81,7 +86,7 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Remove the margin from the h3 -->
-                    <br>
+                    <h3>&nbsp;</h3>
                     <h3 class="text-left mb-0">View 3</h3>
                     <!-- Copy button for View 3 (Copy <pre>) -->
                     <button class="btn btn-primary copy-btn-top-right"
