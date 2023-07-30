@@ -5,7 +5,8 @@
     <script type="text/javascript" th:src="@{/js/copy.js}"></script>
 </head>
 <script th:inline="javascript">
-    const listText = [[${treeStyled}]];
+    const listText1 = [[${treeStyled}]];
+    const listText2 = [[${tree1}]];
 </script>
 <body>
 <div th:replace="~{fragments/general.html :: headerfragment}"></div>
@@ -38,7 +39,7 @@
                     <!-- Copy button for View 1 (Copy List) -->
                     <button class="btn btn-primary"
                             style="position: absolute; top: 10px; right: 20px;"
-                            onclick="copyListToClipboard()">
+                            onclick="copyListToClipboard1()">
                         Copy
                     </button>
                     <div class="bg-white p-3 rounded">
@@ -60,26 +61,53 @@
                     </div>
                 </div>
             </div>
-            <div id="tooltip-list" class="tooltip">Copied!</div>
+            <div id="tooltip-list1" class="tooltip">Copied!</div>
         </div>
         <!-- View 2 -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <!-- Remove the margin from the h3 -->
-                    <h3>&nbsp;</h3>
-                    <h3 class="text-left mb-0">View 2</h3>
-                    <!-- Copy button for View 2 (Copy <pre>) -->
+                    <br>
+                    <br>
+                    <h3 class="text-left">View 2</h3>
+                    <!-- Copy button for View 2 (Copy List) -->
                     <button class="btn btn-primary copy-btn-top-right"
-                            onclick="copyPreToClipboard('tree1', 'tooltip1')">
+                            onclick="copyListToClipboard2()">
                         Copy
                     </button>
-                    <pre id="tree1" class="bg-white p-3 rounded" style="position: relative;">
-                            <code th:text="${tree1}" class="text-dark"></code>
-                        </pre>
+                    <div id="tree1" class="bg-white p-3 rounded" style="position: relative;">
+                        <!-- Task list hierarchy starts here -->
+                        <ol style="list-style-type: decimal;">
+                            <li th:each="sisterTaskList : ${taskList.taskLists}">
+                                <span th:text="${sisterTaskList.taskName}"></span>
+                                <ol style="list-style-type: lower-alpha;">
+                                    <li th:each="taskTaskList : ${sisterTaskList.taskLists}">
+                                        <span th:text="${taskTaskList.taskName}"></span>
+                                        <ol style="list-style-type: lower-alpha;">
+                                            <li th:each="lowLevelTask : ${taskTaskList.taskLists}">
+                                                <span th:text="${lowLevelTask.taskName}"></span>
+                                                <ol style="list-style-type: lower-roman;">
+                                                    <li th:each="lowLevelSubTask : ${lowLevelTask.taskLists}">
+                                                        <span th:text="${lowLevelSubTask.taskName}"></span>
+                                                        <ol style="list-style-type: disc;">
+                                                            <li th:each="finalTask : ${lowLevelSubTask.taskLists}">
+                                                                <span th:text="${finalTask.taskName}"></span>
+                                                            </li>
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                        </ol>
+                        <!-- End of Task list hierarchy -->
+                        <br>
+                    </div>
                 </div>
             </div>
-            <div id="tooltip1" class="tooltip">Copied!</div>
+            <div id="tooltip-list2" class="tooltip">Copied!</div>
         </div>
         <!-- View 3 -->
         <div class="col-md-6 mt-3">
@@ -90,7 +118,7 @@
                     <h3 class="text-left mb-0">View 3</h3>
                     <!-- Copy button for View 3 (Copy <pre>) -->
                     <button class="btn btn-primary copy-btn-top-right"
-                            onclick="copyPreToClipboard('tree', 'tooltip2')">
+                            onclick="copyPreToClipboard('tree')">
                         Copy
                     </button>
                     <pre id="tree" class="bg-white p-3 rounded" style="position: relative;">
@@ -98,7 +126,7 @@
                     </pre>
                 </div>
             </div>
-            <div id="tooltip2" class="tooltip">Copied!</div>
+            <div id="tooltip-list3" class="tooltip">Copied!</div>
         </div>
     </div>
 </div>
