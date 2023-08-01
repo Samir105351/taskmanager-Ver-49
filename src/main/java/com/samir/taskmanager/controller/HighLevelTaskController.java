@@ -24,39 +24,9 @@ public class HighLevelTaskController {
     @Autowired
     private HighLevelTaskService highLevelTaskService;
 
-    @GetMapping("/highleveltasks")
-    public String hltPage(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(1l));
-        return "hlt/hlt";
-    }
-
-    @GetMapping("/highleveltasks/sorted")
-    public String hltSorted(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(2l));
-        return "hlt/hlt";
-    }
-
-    @GetMapping("/highleveltasks/taskidsorted")
-    public String hltSortedByTaskID(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(3l));
-        return "hlt/hlt";
-    }
-
-    @GetMapping("highleveltasks/tasknamesorted")
-    public String hltSortedByTaskName(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(4l));
-        return "hlt/hlt";
-    }
-
-    @GetMapping("highleveltasks/tagidsorted")
-    public String hltSortedByTaskTagID(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(5l));
-        return "hlt/hlt";
-    }
-
-    @GetMapping("/highleveltasks/tagnamesorted")
-    public String hltSortedByTaskTagName(Model model) {
-        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(6l));
+    @GetMapping("/highleveltasks/sort/{sortBy}")
+    public String hltPage(Model model,@PathVariable String sortBy) {
+        model.addAttribute("highleveltasks", sortBy.equals("id")?highLevelTaskService.getAllHltTaskTaskTag(1l):sortBy.equals("name")?highLevelTaskService.getAllHltTaskTaskTag(2l):sortBy.equals("taskID")?highLevelTaskService.getAllHltTaskTaskTag(3l):sortBy.equals("taskName")?highLevelTaskService.getAllHltTaskTaskTag(4l):sortBy.equals("tagID")?highLevelTaskService.getAllHltTaskTaskTag(5l):highLevelTaskService.getAllHltTaskTaskTag(6l));
         return "hlt/hlt";
     }
 
@@ -77,7 +47,7 @@ public class HighLevelTaskController {
         }
         highLevelTask.setTaskTag(taskTag);
         highLevelTaskService.saveHighLevelTask(highLevelTask);
-        return "redirect:/highleveltasks";
+        return "redirect:/highleveltasks/sort/id";
     }
 
     @GetMapping("/highleveltasks/edit/{id}")
@@ -95,7 +65,7 @@ public class HighLevelTaskController {
         existingHlt.setTask(highLevelTask.getTask());
         existingtaskTag.setTaskTagName("T_" + highLevelTask.getTask().getTaskID());
         highLevelTaskService.updateHighLevelTask(existingHlt);
-        return "redirect:/highleveltasks";
+        return "redirect:/highleveltasks/sort/id";
     }
 
     @GetMapping("/highleveltask/delete/{id}")
@@ -105,7 +75,7 @@ public class HighLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/highleveltasks";
+            return "redirect:/highleveltasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -119,7 +89,7 @@ public class HighLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/highleveltasks";
+            return "redirect:/highleveltasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
