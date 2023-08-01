@@ -24,39 +24,9 @@ public class LowLevelTaskController {
     @Autowired
     private LowLevelTaskService lowLevelTaskService;
 
-    @GetMapping("/lowleveltasks")
-    public String lltPage(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(1l));
-        return "llt/llt";
-    }
-
-    @GetMapping("/lowleveltasks/sorted")
-    public String lltPageSortedByName(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(2l));
-        return "llt/llt";
-    }
-
-    @GetMapping("/lowleveltasks/hltidsorted")
-    public String lltPageSortedByHltID(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(3l));
-        return "llt/llt";
-    }
-
-    @GetMapping("/lowleveltasks/hltnamesorted")
-    public String lltPageSortedByHltName(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(4l));
-        return "llt/llt";
-    }
-
-    @GetMapping("/lowleveltasks/tagidsorted")
-    public String lltPageSortedByTagID(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(5l));
-        return "llt/llt";
-    }
-
-    @GetMapping("/lowleveltasks/tagnamesorted")
-    public String lltPageSortedByTagName(Model model) {
-        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(6l));
+    @GetMapping("/lowleveltasks/sort/{sortBy}")
+    public String lltPage(Model model,@PathVariable("sortBy") String sortBy) {
+        model.addAttribute("lowleveltasks",sortBy.equals("id")?lowLevelTaskService.getAllLltHltTaskTag(1l):sortBy.equals("name")?lowLevelTaskService.getAllLltHltTaskTag(2l):sortBy.equals("hltID")?lowLevelTaskService.getAllLltHltTaskTag(3l):sortBy.equals("hltName")?lowLevelTaskService.getAllLltHltTaskTag(4l):sortBy.equals("tagID")?lowLevelTaskService.getAllLltHltTaskTag(5l):lowLevelTaskService.getAllLltHltTaskTag(6l));
         return "llt/llt";
     }
 
@@ -78,7 +48,7 @@ public class LowLevelTaskController {
         }
         lowLevelTask.setTaskTag(taskTag);
         lowLevelTaskService.saveLowLevelTask(lowLevelTask);
-        return "redirect:/lowleveltasks";
+        return "redirect:/lowleveltasks/sort/id";
     }
 
     @GetMapping("/lowleveltasks/edit/{id}")
@@ -95,7 +65,7 @@ public class LowLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/lowleveltasks";
+            return "redirect:/lowleveltasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -108,7 +78,7 @@ public class LowLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/lowleveltasks";
+            return "redirect:/lowleveltasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -123,7 +93,7 @@ public class LowLevelTaskController {
         existingLlt.setHighLevelTask(lowLevelTask.getHighLevelTask());
         existingtaskTag.setTaskTagName("H_" + lowLevelTask.getHighLevelTask().getHighLevelTaskID());
         lowLevelTaskService.updateLowLevelTask(existingLlt);
-        return "redirect:/lowleveltasks";
+        return "redirect:/lowleveltasks/sort/id";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks")
