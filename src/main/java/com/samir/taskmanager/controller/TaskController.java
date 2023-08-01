@@ -21,39 +21,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping("/tasks")
-    public String taskPage(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(1l));
-        return "task/tasks";
-    }
-
-    @GetMapping("/tasks/sorted")
-    public String taskSorted(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(2l));
-        return "task/tasks";
-    }
-
-    @GetMapping("/tasks/systemidsorted")
-    public String taskSystemIdSorted(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(3l));
-        return "task/tasks";
-    }
-
-    @GetMapping("/tasks/systemnamesorted")
-    public String taskSystemNameSorted(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(4l));
-        return "task/tasks";
-    }
-
-    @GetMapping("/tasks/tagidsorted")
-    public String taskTagIdSorted(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(5l));
-        return "task/tasks";
-    }
-
-    @GetMapping("/tasks/tagnamesorted")
-    public String taskNameSorted(Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskSisterTaskTags(6l));
+    @GetMapping("/tasks/sort/{sortBy}")
+    public String taskPage(Model model,@PathVariable("sortBy") String sortBy) {
+        model.addAttribute("tasks",sortBy.equals("id")?taskService.getAllTaskSisterTaskTags(1l):sortBy.equals("name")?taskService.getAllTaskSisterTaskTags(2l):sortBy.equals("sysId")?taskService.getAllTaskSisterTaskTags(3l):sortBy.equals("sysName")?taskService.getAllTaskSisterTaskTags(4l):sortBy.equals("tagID")?taskService.getAllTaskSisterTaskTags(5l):taskService.getAllTaskSisterTaskTags(6l));
         return "task/tasks";
     }
 
