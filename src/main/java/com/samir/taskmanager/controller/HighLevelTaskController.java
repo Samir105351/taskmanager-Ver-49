@@ -96,27 +96,11 @@ public class HighLevelTaskController {
         }
     }
 
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks")
-    public String getAllHltUnderTask(@PathVariable Long id, @PathVariable Long tid, Model model) {
+    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/sort/{sortBy}")
+    public String getAllHltUnderTask(@PathVariable("id") Long id, @PathVariable("tid") Long tid,@PathVariable("sortBy") String sortBy, Model model) {
         model.addAttribute("sister", sisterService.getSisterById(id));
         model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 1l));
-        return "hlt/hlt_list_by_task_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/sortHLTN")
-    public String getAllHltUnderTaskSortedHLTN(@PathVariable Long id, @PathVariable Long tid, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 2l));
-        return "hlt/hlt_list_by_task_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/sortTGID")
-    public String getAllHltUnderTaskSortedTGID(@PathVariable Long id, @PathVariable Long tid, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 3l));
+        model.addAttribute("hlt", sortBy.equals("id")?highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 1l):sortBy.equals("name")?highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 2l):highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 3l));
         return "hlt/hlt_list_by_task_id";
     }
 
@@ -139,7 +123,7 @@ public class HighLevelTaskController {
         }
         highLevelTask.setTaskTag(taskTag);
         highLevelTaskService.saveHighLevelTask(highLevelTask);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort/id";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/edit/{hid}")
@@ -159,7 +143,7 @@ public class HighLevelTaskController {
         existingHlt.setTask(highLevelTask.getTask());
         existingtaskTag.setTaskTagName("T_" + highLevelTask.getTask().getTaskID());
         highLevelTaskService.updateHighLevelTask(existingHlt);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort/id";
     }
 
 }

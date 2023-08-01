@@ -36,7 +36,7 @@
             <td>
                 <a th:href="@{/systems/edit/{id}(id=${sister.sisterId})}" class="btn btn-primary">Update</a>
                 <a th:href="@{/system/delete/{id}(id=${sister.sisterId})}" class="btn btn-danger">Delete</a>
-                <a th:href="@{/systems/{id}/tasks(id=${sister.sisterId})}" class="btn btn-info">Tasks</a>
+                <a th:href="@{/systems/{id}/tasks/sort/id(id=${sister.sisterId})}" class="btn btn-info">Tasks</a>
             </td>
         </tr>
         </tbody>

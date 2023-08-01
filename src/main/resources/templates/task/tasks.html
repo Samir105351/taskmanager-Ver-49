@@ -48,7 +48,7 @@
             <td>
                 <a th:href="@{/tasks/edit/{id}(id=${task.taskID})}" class="btn btn-primary">Update</a>
                 <a th:href="@{/task/delete/{id}(id=${task.taskID})}" class="btn btn-danger">Delete</a>
-                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks(id=${task.sisterId},tid=${task.taskID})}" class="btn btn-info">High Level Tasks</a>
+                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort/id(id=${task.sisterId},tid=${task.taskID})}" class="btn btn-info">High Level Tasks</a>
 
             </td>
         </tr>

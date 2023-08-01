@@ -93,23 +93,9 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/systems/{id}/tasks")
-    public String getAllTasksUnderSystem(@PathVariable Long id, Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskTaskTagUnderASisterId(id, 1l));
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        return "task/task_list_by_system_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/sorted")
-    public String getAllTasksUnderSystemSortTN(@PathVariable Long id, Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskTaskTagUnderASisterId(id, 2l));
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        return "task/task_list_by_system_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/sortedByTGID")
-    public String getAllTasksUnderSystemSortTGID(@PathVariable Long id, Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskTaskTagUnderASisterId(id, 3l));
+    @GetMapping("/systems/{id}/tasks/sort/{sortBy}")
+    public String getAllTasksUnderSystem(@PathVariable("id") Long id,@PathVariable("sortBy") String sortBy, Model model) {
+        model.addAttribute("tasks", sortBy.equals("id")?taskService.getAllTaskTaskTagUnderASisterId(id, 1l):sortBy.equals("name")?taskService.getAllTaskTaskTagUnderASisterId(id, 2l):taskService.getAllTaskTaskTagUnderASisterId(id, 3l));
         model.addAttribute("sister", sisterService.getSisterById(id));
         return "task/task_list_by_system_id";
     }
@@ -132,7 +118,7 @@ public class TaskController {
         }
         task.setTaskTag(taskTag);
         taskService.saveTask(task);
-        return "redirect:/systems/" + id + "/tasks";
+        return "redirect:/systems/" + id + "/tasks/sort/id";
     }
 
     @GetMapping("/systems/{sid}/tasks/edit/{id}")
@@ -151,7 +137,7 @@ public class TaskController {
         existingtask.setSister(task.getSister());
         existingtaskTag.setTaskTagName("S_" + task.getSister().getSisterId());
         taskService.updateTask(existingtask);
-        return "redirect:/systems/" + sid + "/tasks";
+        return "redirect:/systems/" + sid + "/tasks/sort/id";
     }
 }
 

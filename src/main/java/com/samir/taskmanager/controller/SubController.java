@@ -98,33 +98,13 @@ public class SubController {
         }
     }
 
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks")
-    public String getAllLltUnderHlt(@PathVariable Long id, @PathVariable Long tid, @PathVariable Long hid, @PathVariable Long lid, Model model) {
+    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/sort/{sortBy}")
+    public String getAllLltUnderHlt(@PathVariable("id") Long id, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid, @PathVariable("lid") Long lid,@PathVariable String sortBy, Model model) {
         model.addAttribute("sister", sisterService.getSisterById(id));
         model.addAttribute("task", taskService.getTaskById(tid));
         model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
         model.addAttribute("llt", lowLevelTaskService.getLowLevelTaskById(lid));
-        model.addAttribute("sub", subService.getJoinSubTaskTagByALlt(lid, 1l));
-        return "sub/sub_list_by_llt_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/SUBNSorted")
-    public String getAllLltUnderHltSUBNSorted(@PathVariable Long id, @PathVariable Long tid, @PathVariable Long hid, @PathVariable Long lid, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
-        model.addAttribute("llt", lowLevelTaskService.getLowLevelTaskById(lid));
-        model.addAttribute("sub", subService.getJoinSubTaskTagByALlt(lid, 2l));
-        return "sub/sub_list_by_llt_id";
-    }
-
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/TGIDSorted")
-    public String getAllLltUnderHltTGIDSorted(@PathVariable Long id, @PathVariable Long tid, @PathVariable Long hid, @PathVariable Long lid, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
-        model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
-        model.addAttribute("llt", lowLevelTaskService.getLowLevelTaskById(lid));
-        model.addAttribute("sub", subService.getJoinSubTaskTagByALlt(lid, 3l));
+        model.addAttribute("sub", sortBy.equals("id")?subService.getJoinSubTaskTagByALlt(lid, 1l):sortBy.equals("name")?subService.getJoinSubTaskTagByALlt(lid, 2l):subService.getJoinSubTaskTagByALlt(lid, 3l));
         return "sub/sub_list_by_llt_id";
     }
 
@@ -132,7 +112,7 @@ public class SubController {
     public String getRedirectLlt(@PathVariable Long hid, @PathVariable Long lid, Model model) {
         Long t = highLevelTaskService.getHighLevelTaskById(hid).getTask().getTaskID();
         Long s = taskService.getTaskById(t).getSister().getSisterId();
-        return "redirect:/systems/" + s + "/tasks/" + t + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks";
+        return "redirect:/systems/" + s + "/tasks/" + t + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks/sort/id";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/new")
@@ -156,7 +136,7 @@ public class SubController {
         }
         lowLevelSubTask.setTaskTag(taskTag);
         subService.saveSubTask(lowLevelSubTask);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks/sort/id";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/edit/{sid}")
@@ -172,12 +152,12 @@ public class SubController {
 
     @PostMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/{sid}")
     public String updatehlt(@PathVariable Long id, @PathVariable Long tid, @PathVariable Long hid, @PathVariable Long lid, @PathVariable Long sid, @ModelAttribute("sub") LowLevelSubTask lowLevelSubTask, Model model) {
-        LowLevelSubTask existingsub = subService.getSubTaskById(sid);
-        TaskTag existingtaskTag = existingsub.getTaskTag();
-        existingsub.setLowLevelSubTaskName(lowLevelSubTask.getLowLevelSubTaskName());
-        existingsub.setLowLevelTask(lowLevelSubTask.getLowLevelTask());
+        LowLevelSubTask existingSub = subService.getSubTaskById(sid);
+        TaskTag existingtaskTag = existingSub.getTaskTag();
+        existingSub.setLowLevelSubTaskName(lowLevelSubTask.getLowLevelSubTaskName());
+        existingSub.setLowLevelTask(lowLevelSubTask.getLowLevelTask());
         existingtaskTag.setTaskTagName("L_" + lowLevelSubTask.getLowLevelTask().getLowLevelTaskID());
-        subService.updateSubTask(existingsub);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks";
+        subService.updateSubTask(existingSub);
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/" + lid + "/lowlevelsubtasks/sort/id";
     }
 }

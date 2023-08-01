@@ -7,8 +7,8 @@
 <div class = "container">
   <div class = "row">
     <h6>
-      <a th:href="@{/systems}" style="text-decoration: none;color: black;" th:text="${sister.sisterName}"></a> &gt;
-      <a th:href="@{/systems/{id}/tasks(id=${sister.sisterId})}" style="text-decoration: none;color: black;" th:text="${task.taskName}"></a> &gt;&nbsp;High Level Task
+      <a th:href="@{/systems/sort/id}" style="text-decoration: none;color: black;" th:text="${sister.sisterName}"></a> &gt;
+      <a th:href="@{/systems/{id}/tasks/sort/id(id=${sister.sisterId})}" style="text-decoration: none;color: black;" th:text="${task.taskName}"></a> &gt;&nbsp;High Level Task
     </h6>
   </div>
   <br>
