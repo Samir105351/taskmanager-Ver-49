@@ -26,39 +26,9 @@ public class SubController {
     @Autowired
     private SubService subService;
 
-    @GetMapping("/subtasks")
-    public String lltPage(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(1l));
-        return "sub/sub";
-    }
-
-    @GetMapping("/subtasks/sorted")
-    public String lltPageSorted(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(2l));
-        return "sub/sub";
-    }
-
-    @GetMapping("/subtasks/lltidsorted")
-    public String lltPageSortedByLltID(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(3l));
-        return "sub/sub";
-    }
-
-    @GetMapping("/subtasks/lltnamesorted")
-    public String lltPageSortedByLltName(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(4l));
-        return "sub/sub";
-    }
-
-    @GetMapping("/subtasks/tagidsorted")
-    public String lltPageSortedByTagID(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(5l));
-        return "sub/sub";
-    }
-
-    @GetMapping("/subtasks/tagnamesorted")
-    public String lltPageSortedByTagName(Model model) {
-        model.addAttribute("subtasks", subService.getJoinSubLowTag(6l));
+    @GetMapping("/subtasks/sort/{sortBy}")
+    public String lltPage(Model model,@PathVariable("sortBy") String sortBy) {
+        model.addAttribute("subtasks",sortBy.equals("id")?subService.getJoinSubLowTag(1l):sortBy.equals("name")?subService.getJoinSubLowTag(2l):sortBy.equals("lltID")?subService.getJoinSubLowTag(3l):sortBy.equals("lltName")?subService.getJoinSubLowTag(4l):sortBy.equals("tagID")?subService.getJoinSubLowTag(5l):subService.getJoinSubLowTag(6l));
         return "sub/sub";
     }
 
@@ -80,7 +50,7 @@ public class SubController {
         }
         lowLevelSubTask.setTaskTag(taskTag);
         subService.saveSubTask(lowLevelSubTask);
-        return "redirect:/subtasks";
+        return "redirect:/subtasks/sort/id";
     }
 
     @GetMapping("/subtasks/edit/{id}")
@@ -98,7 +68,7 @@ public class SubController {
         existingsub.setLowLevelTask(lowLevelSubTask.getLowLevelTask());
         existingtaskTag.setTaskTagName("L_" + lowLevelSubTask.getLowLevelTask().getLowLevelTaskID());
         subService.updateSubTask(existingsub);
-        return "redirect:/subtasks";
+        return "redirect:/subtasks/sort/id";
     }
 
     @GetMapping("/subtask/delete/{id}")
@@ -108,7 +78,7 @@ public class SubController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/subtasks";
+            return "redirect:/subtasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -121,7 +91,7 @@ public class SubController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/subtasks";
+            return "redirect:/subtasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
