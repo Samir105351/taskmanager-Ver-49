@@ -44,7 +44,7 @@ public class TaskController {
         }
         task.setTaskTag(taskTag);
         taskService.saveTask(task);
-        return "redirect:/tasks";
+        return "redirect:/tasks/sort/id";
     }
 
     @GetMapping("/tasks/edit/{id}")
@@ -62,7 +62,7 @@ public class TaskController {
         existingtask.setSister(task.getSister());
         existingtaskTag.setTaskTagName("S_" + task.getSister().getSisterId());
         taskService.updateTask(existingtask);
-        return "redirect:/tasks";
+        return "redirect:/tasks/sort/id";
     }
 
     @GetMapping("/task/delete/{id}")
@@ -72,7 +72,7 @@ public class TaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/tasks";
+            return "redirect:/tasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -86,7 +86,7 @@ public class TaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/tasks";
+            return "redirect:/tasks/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
