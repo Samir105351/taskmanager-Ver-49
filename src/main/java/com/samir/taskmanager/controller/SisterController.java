@@ -14,15 +14,9 @@ public class SisterController {
     @Autowired
     private SisterService sisterService;
 
-    @GetMapping("/systems")
-    public String systemPage(Model model) {
-        model.addAttribute("sisters", sisterService.getAllSister("sisterId"));
-        return "sister/sisters";
-    }
-
-    @GetMapping("/systems/sorted")
-    public String systemSorted(Model model) {
-        model.addAttribute("sisters", sisterService.getAllSister("sisterName"));
+    @GetMapping("/systems/sort/{sortBy}")
+    public String systemPage(Model model,@PathVariable("sortBy") String sortBy) {
+        model.addAttribute("sisters", sisterService.getAllSister(sortBy.equals("id") ? "sisterId" : "sisterName"));
         return "sister/sisters";
     }
 
@@ -36,7 +30,7 @@ public class SisterController {
     @PostMapping("/systems")
     public String saveSystem(@ModelAttribute("sister") Sister sister) {
         sisterService.saveSister(sister);
-        return "redirect:/systems";
+        return "redirect:/systems/sort/id";
     }
 
     @GetMapping("/systems/edit/{id}")
@@ -51,7 +45,7 @@ public class SisterController {
         existingSister.setSisterName(sister.getSisterName());
 
         sisterService.updateSister(existingSister);
-        return "redirect:/systems";
+        return "redirect:/systems/sort/id";
     }
 
     @GetMapping("/system/delete/{id}")
@@ -61,7 +55,7 @@ public class SisterController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/systems";
+            return "redirect:/systems/sort/id";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -71,8 +65,6 @@ public class SisterController {
     @GetMapping("/systems/deleteall")
     public String deleteStudent() {
         sisterService.deleteAllSisters();
-        return "redirect:/systems";
+        return "redirect:/systems/sort/id";
     }
-
-
 }
