@@ -48,6 +48,8 @@
             <td th:text="${task.taskTagName}"></td>
             <td>
                 <a th:href="@{/subtasks/edit/{id}(id=${task.lowLevelSubTaskID})}" class="btn btn-primary">Update</a>
+                <br class="br-visible">
+                <br class="br-visible">
                 <a th:href="@{/subtask/delete/{id}(id=${task.lowLevelSubTaskID})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>

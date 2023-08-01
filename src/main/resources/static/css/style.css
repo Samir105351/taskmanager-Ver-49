@@ -8,3 +8,20 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+@media (min-width: 1000px) {
+  .br-visible {
+    display: none; /* Hide the <br> tags for larger screen sizes */
+  }
+}
+.welcome {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  background-image: url("img/luke-chesser-pJadQetzTkI-unsplash.jpg"); /* Your transparent custom image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

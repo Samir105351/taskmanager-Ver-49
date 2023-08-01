@@ -48,7 +48,11 @@
             <td th:text="${h.taskTagName}"></td>
             <td>
                 <a th:href="@{/highleveltasks/edit/{id}(id=${h.highLevelTaskID})}" class="btn btn-primary">Update</a>
+                <br class="br-visible">
+                <br class="br-visible">
                 <a th:href="@{/highleveltask/delete/{id}(id=${h.highLevelTaskID})}" class="btn btn-danger">Delete</a>
+                <br class="br-visible">
+                <br class="br-visible">
                 <a th:href="@{/task/{tid}/highleveltasks/{hid}/lowleveltasks(hid=${h.highLevelTaskID},tid=${h.taskID})}" class="btn btn-info">Low Level Tasks</a>
             </td>
         </tr>
