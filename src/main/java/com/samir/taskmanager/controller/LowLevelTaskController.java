@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class LowLevelTaskController {
@@ -24,9 +21,9 @@ public class LowLevelTaskController {
     @Autowired
     private LowLevelTaskService lowLevelTaskService;
 
-    @GetMapping("/lowleveltasks/sort/{sortBy}")
-    public String lltPage(Model model,@PathVariable("sortBy") String sortBy) {
-        model.addAttribute("lowleveltasks",sortBy.equals("id")?lowLevelTaskService.getAllLltHltTaskTag(1l):sortBy.equals("name")?lowLevelTaskService.getAllLltHltTaskTag(2l):sortBy.equals("hltID")?lowLevelTaskService.getAllLltHltTaskTag(3l):sortBy.equals("hltName")?lowLevelTaskService.getAllLltHltTaskTag(4l):sortBy.equals("tagID")?lowLevelTaskService.getAllLltHltTaskTag(5l):lowLevelTaskService.getAllLltHltTaskTag(6l));
+    @RequestMapping(value = "/lowleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
+    public String sortHlt(@RequestParam(required = false) Long id, Model model) {
+        model.addAttribute("lowleveltasks", lowLevelTaskService.getAllLltHltTaskTag(id != null ? id : 1L));
         return "llt/llt";
     }
 
@@ -48,7 +45,7 @@ public class LowLevelTaskController {
         }
         lowLevelTask.setTaskTag(taskTag);
         lowLevelTaskService.saveLowLevelTask(lowLevelTask);
-        return "redirect:/lowleveltasks/sort/id";
+        return "redirect:/lowleveltasks/sort";
     }
 
     @GetMapping("/lowleveltasks/edit/{id}")
@@ -65,7 +62,7 @@ public class LowLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/lowleveltasks/sort/id";
+            return "redirect:/lowleveltasks/sort";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -78,7 +75,7 @@ public class LowLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/lowleveltasks/sort/id";
+            return "redirect:/lowleveltasks/sort";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -93,22 +90,22 @@ public class LowLevelTaskController {
         existingLlt.setHighLevelTask(lowLevelTask.getHighLevelTask());
         existingtaskTag.setTaskTagName("H_" + lowLevelTask.getHighLevelTask().getHighLevelTaskID());
         lowLevelTaskService.updateLowLevelTask(existingLlt);
-        return "redirect:/lowleveltasks/sort/id";
+        return "redirect:/lowleveltasks/sort";
     }
 
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort/{sortBy}")
-    public String getAllLltUnderHlt(@PathVariable("id") Long id, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid,@PathVariable("sortBy") String sortBy, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
+    @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
+    public String getAllHltUnderTask(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid,  @RequestParam(required = false) Long id, Model model) {
+        model.addAttribute("sister", sisterService.getSisterById(sid));
         model.addAttribute("task", taskService.getTaskById(tid));
         model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
-        model.addAttribute("llt", sortBy.equals("id")?lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid, 1l):sortBy.equals("name")?lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid, 2l):lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid, 3l));
+        model.addAttribute("llt", lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid,id != null ? id : 1L));
         return "llt/llt_list_by_hlt_id";
     }
 
     @GetMapping("/task/{tid}/highleveltasks/{hid}/lowleveltasks")
     public String getAllLltUnderRedirect(@PathVariable Long hid, @PathVariable Long tid, Model model) {
         Long s = taskService.getTaskById(tid).getSister().getSisterId();
-        return "redirect:" + "/systems/" + s + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort/id";
+        return "redirect:" + "/systems/" + s + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/new")
@@ -131,7 +128,7 @@ public class LowLevelTaskController {
         }
         lowLevelTask.setTaskTag(taskTag);
         lowLevelTaskService.saveLowLevelTask(lowLevelTask);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort/id";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/edit/{lid}")
@@ -152,6 +149,6 @@ public class LowLevelTaskController {
         existingLlt.setHighLevelTask(lowLevelTask.getHighLevelTask());
         existingtaskTag.setTaskTagName("H_" + lowLevelTask.getHighLevelTask().getHighLevelTaskID());
         lowLevelTaskService.updateLowLevelTask(existingLlt);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort/id";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/" + hid + "/lowleveltasks/sort";
     }
 }

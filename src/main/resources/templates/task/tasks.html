@@ -13,16 +13,23 @@
         <button type="button" class="btn btn-danger" onclick="location.href='/tasks/deleteall'">Delete All</button>&nbsp;&nbsp;
     </div>
     <div>
-        <label for="sortOptions">Sort By:</label>
-        <select id="sortOptions" onchange="redirectToSelectedLink(this)">
-            <option value="">Select an option</option>
-            <option value="/tasks/sort/name">Task Name</option>
-            <option value="/tasks/sort/id">Task ID</option>
-            <option value="/tasks/sort/sysName">System Name</option>
-            <option value="/tasks/sort/sysId">System ID</option>
-            <option value="/tasks/sort/tagName">TaskTag Name</option>
-            <option value="/tasks/sort/tagID">TaskTag ID</option>
-        </select>&nbsp;&nbsp;
+        <form id="sortForm" action="/tasks/sort" method="post">
+            <label for="sortOptions">Sort By:</label>
+            <select id="sortOptions" name="id" onchange="submitForm()">
+                <option value="">Select an option</option>
+                <option value="1">Task ID</option>
+                <option value="2">Task Name</option>
+                <option value="3">System ID</option>
+                <option value="4">System Name</option>
+                <option value="5">Tag ID</option>
+                <option value="6">Tag Name</option>
+            </select>
+        </form>
+        <script>
+            function submitForm() {
+                document.getElementById("sortForm").submit();
+            }
+        </script>
     </div>
     <br>
     <table class = "table table-striped table-bordered">
@@ -52,7 +59,7 @@
                 <a th:href="@{/task/delete/{id}(id=${task.taskID})}" class="btn btn-danger">Delete</a>
                 <br class="br-visible">
                 <br class="br-visible">
-                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort/id(id=${task.sisterId},tid=${task.taskID})}" class="btn btn-info">High Level Tasks</a>
+                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort(id=${task.sisterId},tid=${task.taskID})}" class="btn btn-info">High Level Tasks</a>
             </td>
         </tr>
         </tbody>

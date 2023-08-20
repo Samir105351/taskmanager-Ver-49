@@ -13,16 +13,23 @@
     <button type="button" class="btn btn-danger" onclick="location.href='/lowleveltasks/deleteall'">Delete All</button>&nbsp;&nbsp;
   </div>
   <div>
-    <label for="sortOptions">Sort By:</label>
-    <select id="sortOptions" onchange="redirectToSelectedLink(this)">
-      <option value="">Select an option</option>
-      <option value="/lowleveltasks/sort/name">LLT Name</option>
-      <option value="/lowleveltasks/sort/id">LLT ID</option>
-      <option value="/lowleveltasks/sort/hltName">HLT Name</option>
-      <option value="/lowleveltasks/sort/hltID">HLT ID</option>
-      <option value="/lowleveltasks/sort/tagName">TaskTag Name</option>
-      <option value="/lowleveltasks/sort/tagID">TaskTag ID</option>
-    </select>&nbsp;&nbsp;
+    <form id="sortForm" action="/lowleveltasks/sort" method="post">
+      <label for="sortOptions">Sort By:</label>
+      <select id="sortOptions" name="id" onchange="submitForm()">
+        <option value="">Select an option</option>
+        <option value="1">Llt ID</option>
+        <option value="2">Llt Name</option>
+        <option value="3">Hlt ID</option>
+        <option value="4">Hlt Name</option>
+        <option value="5">Tag ID</option>
+        <option value="6">Tag Name</option>
+      </select>
+    </form>
+    <script>
+            function submitForm() {
+                document.getElementById("sortForm").submit();
+            }
+        </script>
   </div>
   <br>
   <table class = "table table-striped table-bordered">

@@ -10,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class HighLevelTaskController {
@@ -24,9 +21,9 @@ public class HighLevelTaskController {
     @Autowired
     private HighLevelTaskService highLevelTaskService;
 
-    @GetMapping("/highleveltasks/sort/{sortBy}")
-    public String hltPage(Model model,@PathVariable String sortBy) {
-        model.addAttribute("highleveltasks", sortBy.equals("id")?highLevelTaskService.getAllHltTaskTaskTag(1l):sortBy.equals("name")?highLevelTaskService.getAllHltTaskTaskTag(2l):sortBy.equals("taskID")?highLevelTaskService.getAllHltTaskTaskTag(3l):sortBy.equals("taskName")?highLevelTaskService.getAllHltTaskTaskTag(4l):sortBy.equals("tagID")?highLevelTaskService.getAllHltTaskTaskTag(5l):highLevelTaskService.getAllHltTaskTaskTag(6l));
+    @RequestMapping(value = "/highleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
+    public String sortHlt(@RequestParam(required = false) Long id, Model model) {
+        model.addAttribute("highleveltasks", highLevelTaskService.getAllHltTaskTaskTag(id != null ? id : 1L));
         return "hlt/hlt";
     }
 
@@ -47,7 +44,7 @@ public class HighLevelTaskController {
         }
         highLevelTask.setTaskTag(taskTag);
         highLevelTaskService.saveHighLevelTask(highLevelTask);
-        return "redirect:/highleveltasks/sort/id";
+        return "redirect:/highleveltasks/sort";
     }
 
     @GetMapping("/highleveltasks/edit/{id}")
@@ -65,7 +62,7 @@ public class HighLevelTaskController {
         existingHlt.setTask(highLevelTask.getTask());
         existingtaskTag.setTaskTagName("T_" + highLevelTask.getTask().getTaskID());
         highLevelTaskService.updateHighLevelTask(existingHlt);
-        return "redirect:/highleveltasks/sort/id";
+        return "redirect:/highleveltasks/sort";
     }
 
     @GetMapping("/highleveltask/delete/{id}")
@@ -75,7 +72,7 @@ public class HighLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/highleveltasks/sort/id";
+            return "redirect:/highleveltasks/sort";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -89,18 +86,18 @@ public class HighLevelTaskController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/highleveltasks/sort/id";
+            return "redirect:/highleveltasks/sort";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
         }
     }
 
-    @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/sort/{sortBy}")
-    public String getAllHltUnderTask(@PathVariable("id") Long id, @PathVariable("tid") Long tid,@PathVariable("sortBy") String sortBy, Model model) {
-        model.addAttribute("sister", sisterService.getSisterById(id));
+    @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
+    public String getAllHltUnderTask(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @RequestParam(required = false) Long id, Model model) {
+        model.addAttribute("sister", sisterService.getSisterById(sid));
         model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", sortBy.equals("id")?highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 1l):sortBy.equals("name")?highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 2l):highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, 3l));
+        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid,id != null ? id : 1L));
         return "hlt/hlt_list_by_task_id";
     }
 
@@ -123,7 +120,7 @@ public class HighLevelTaskController {
         }
         highLevelTask.setTaskTag(taskTag);
         highLevelTaskService.saveHighLevelTask(highLevelTask);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort/id";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort";
     }
 
     @GetMapping("/systems/{id}/tasks/{tid}/highleveltasks/edit/{hid}")
@@ -143,7 +140,7 @@ public class HighLevelTaskController {
         existingHlt.setTask(highLevelTask.getTask());
         existingtaskTag.setTaskTagName("T_" + highLevelTask.getTask().getTaskID());
         highLevelTaskService.updateHighLevelTask(existingHlt);
-        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort/id";
+        return "redirect:/systems/" + id + "/tasks/" + tid + "/highleveltasks/sort";
     }
 
 }

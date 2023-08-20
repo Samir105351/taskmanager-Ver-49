@@ -14,9 +14,9 @@ public class SisterController {
     @Autowired
     private SisterService sisterService;
 
-    @GetMapping("/systems/sort/{sortBy}")
-    public String systemPage(Model model,@PathVariable("sortBy") String sortBy) {
-        model.addAttribute("sisters", sisterService.getAllSister(sortBy.equals("id") ? "sisterId" : "sisterName"));
+    @RequestMapping(value = "/systems/sort", method = {RequestMethod.GET, RequestMethod.POST})
+    public String systemPage(@RequestParam(required = false) String sortBy, Model model) {
+        model.addAttribute("sisters", sisterService.getAllSister(sortBy != null ? sortBy : "sisterId"));
         return "sister/sisters";
     }
 
@@ -30,7 +30,7 @@ public class SisterController {
     @PostMapping("/systems")
     public String saveSystem(@ModelAttribute("sister") Sister sister) {
         sisterService.saveSister(sister);
-        return "redirect:/systems/sort/id";
+        return "redirect:/systems/sort";
     }
 
     @GetMapping("/systems/edit/{id}")
@@ -45,7 +45,7 @@ public class SisterController {
         existingSister.setSisterName(sister.getSisterName());
 
         sisterService.updateSister(existingSister);
-        return "redirect:/systems/sort/id";
+        return "redirect:/systems/sort";
     }
 
     @GetMapping("/system/delete/{id}")
@@ -55,7 +55,7 @@ public class SisterController {
         String previousPage = request.getHeader("referer");
         if (previousPage == null || previousPage.isEmpty()) {
             // If the referer header is not available, redirect to a default page
-            return "redirect:/systems/sort/id";
+            return "redirect:/systems/sort";
         } else {
             // Redirect to the previous page
             return "redirect:" + previousPage;
@@ -65,6 +65,6 @@ public class SisterController {
     @GetMapping("/systems/deleteall")
     public String deleteStudent() {
         sisterService.deleteAllSisters();
-        return "redirect:/systems/sort/id";
+        return "redirect:/systems/sort";
     }
 }

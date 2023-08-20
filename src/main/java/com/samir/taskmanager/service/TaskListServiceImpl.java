@@ -119,7 +119,6 @@ public class TaskListServiceImpl implements TaskListService {
         return resultBuilder.toString();
     }
 
-    // Helper method for generating the hierarchical task list string with different styles for children
     private void getHierarchicalTaskListStringWithStyleHelper(TaskList taskList, StringBuilder resultBuilder, int indentationLevel, int[] counters) {
         if (taskList == null) {
             return;
@@ -127,7 +126,6 @@ public class TaskListServiceImpl implements TaskListService {
 
         String currentTaskName = taskList.getTaskName();
 
-        // Choose the appropriate prefix based on the indentation level and style
         String prefix;
         if (indentationLevel == 0) {
             prefix = "";
@@ -147,7 +145,6 @@ public class TaskListServiceImpl implements TaskListService {
             counters[2]++;
             counters[3] = 1;
         } else if (indentationLevel == 4) {
-//            String[] romanNumerals = {"   i. ", "  ii. ", " iii. ", "  iv. ", "   v. ", "  vi. ", " vii. ", "viii. ", "  ix. ", "   x. "};
             String s=IntegerToRoman.RomanNumerals(counters[3]);
             int l=IntegerToRoman.RomanNumerals(counters[3]).length();
             for(int i=0;i<4-l;i++){
@@ -158,11 +155,8 @@ public class TaskListServiceImpl implements TaskListService {
         } else {
             prefix = "    • ";
         }
-
-        // Append the prefix and the task name to the resultBuilder
         resultBuilder.append("  ".repeat(indentationLevel)).append(prefix).append(currentTaskName).append("\n");
 
-        // Recursively process the children task lists
         List<TaskList> subTaskLists = taskList.getTaskLists();
         if (subTaskLists != null) {
             for (TaskList subTaskList : subTaskLists) {
@@ -177,7 +171,6 @@ public class TaskListServiceImpl implements TaskListService {
         return resultBuilder.toString();
     }
 
-    // Helper method for generating the hierarchical task list string with different styles for children
     private void getHierarchicalTaskListStringWithAnotherStyleHelper(TaskList taskList, StringBuilder resultBuilder, int indentationLevel, int[] counters) {
         if (taskList == null) {
             return;
@@ -185,7 +178,6 @@ public class TaskListServiceImpl implements TaskListService {
 
         String currentTaskName = taskList.getTaskName();
 
-        // Choose the appropriate prefix based on the indentation level and style
         String prefix;
         if (indentationLevel == 0) {
             prefix = "";
@@ -208,10 +200,8 @@ public class TaskListServiceImpl implements TaskListService {
             prefix = "      □ ";
         }
 
-        // Append the prefix and the task name to the resultBuilder
         resultBuilder.append("  ".repeat(indentationLevel)).append(prefix).append(currentTaskName).append("\n");
 
-        // Recursively process the children task lists
         List<TaskList> subTaskLists = taskList.getTaskLists();
         if (subTaskLists != null) {
             for (TaskList subTaskList : subTaskLists) {

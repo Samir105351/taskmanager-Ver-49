@@ -7,14 +7,20 @@
     <div class = "row">
         <h1>List of All Task Tags</h1>
     </div>
-
     <div>
-        <label for="sortOptions">Sort By:</label>
-        <select id="sortOptions" onchange="redirectToSelectedLink(this)">
-            <option value="">Select an option</option>
-            <option value="/tasktags/sort/name">Name</option>
-            <option value="/tasktags/sort/id">ID</option>
-        </select>&nbsp;&nbsp;
+        <form id="sortForm" action="/tasktags/sort" method="post">
+            <label for="sortOptions">Sort By:</label>
+            <select id="sortOptions" name="sortBy" onchange="submitForm()">
+                <option value="">Select an option</option>
+                <option value="taskTagID">Tag ID</option>
+                <option value="taskTagName">Tag Name</option>
+            </select>
+        </form>
+        <script>
+            function submitForm() {
+                document.getElementById("sortForm").submit();
+            }
+        </script>
     </div>
     <br>
     <table class = "table table-striped table-bordered">

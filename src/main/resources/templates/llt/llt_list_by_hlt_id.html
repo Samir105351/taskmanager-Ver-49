@@ -7,9 +7,9 @@
 <div class = "container">
     <div class = "row">
         <h6>
-            <a th:href="@{/systems/sort/id}" style="text-decoration: none;color: black;" th:text="${sister.sisterName}"></a> &gt;
-            <a th:href="@{/systems/{id}/tasks/sort/id(id=${sister.sisterId})}" style="text-decoration: none;color: black;" th:text="${task.taskName}"></a> &gt;
-            <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort/id(id=${sister.sisterId},tid=${task.taskID})}" style="text-decoration: none;color: black;" th:text="${hlt.highLevelTaskName}"></a> &gt;&nbsp;Low Level Task
+            <a th:href="@{/systems/sort}" style="text-decoration: none;color: black;" th:text="${sister.sisterName}"></a> &gt;
+            <a th:href="@{/systems/{id}/tasks/sort(id=${sister.sisterId})}" style="text-decoration: none;color: black;" th:text="${task.taskName}"></a> &gt;
+            <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort(id=${sister.sisterId},tid=${task.taskID})}" style="text-decoration: none;color: black;" th:text="${hlt.highLevelTaskName}"></a> &gt;&nbsp;Low Level Task
         </h6>
     </div>
     <br>
@@ -18,13 +18,21 @@
         <button type="button" class="btn btn-danger" onclick="location.href='/lowleveltasks/deleteall'">Delete All</button>&nbsp;&nbsp;
     </div>
     <div>
-        <label for="sortOptions">Sort By:</label>
-        <select id="sortOptions" onchange="redirectToSelectedLink(this)">
-            <option value="">Select an option</option>
-            <option th:value="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort/name(id=${sister.sisterId},tid=${task.taskID},hid=${hlt.highLevelTaskID})}">LLT Name</option>
-            <option th:value="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort/id(id=${sister.sisterId},tid=${task.taskID},hid=${hlt.highLevelTaskID})}">LLT ID</option>
-            <option th:value="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort/tagID(id=${sister.sisterId},tid=${task.taskID},hid=${hlt.highLevelTaskID})}">TaskTag ID</option>
-        </select>&nbsp;&nbsp;
+        <form id="sortForm" th:action="@{'/systems/' + ${sister.sisterId} + '/tasks/' + ${task.taskID} + '/highleveltasks/'+ ${hlt.highLevelTaskID} + '/lowleveltasks/' + 'sort'}" method="post">
+            <label for="sortOptions">Sort By:</label>
+            <select id="sortOptions" name="id" onchange="submitForm()">
+                <option value="">Select an option</option>
+                <option value="1">Llt ID</option>
+                <option value="2">Llt Name</option>
+                <option value="3">TaskTag ID</option>
+                <option value="4">TaskTag Name</option>
+            </select>
+        </form>
+        <script>
+        function submitForm() {
+            document.getElementById("sortForm").submit();
+        }
+    </script>
     </div>
     <br>
 
@@ -51,7 +59,7 @@
                 <a th:href="@{/lowleveltask/delete/{id}(id=${l.lowLevelTaskID})}" class="btn btn-danger">Delete</a>
                 <br class="br-visible">
                 <br class="br-visible">
-                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/sort/id(id=${sister.sisterId},tid=${task.taskID},hid=${hlt.highLevelTaskID},lid=${l.lowLevelTaskID})}" class="btn btn-info">Low Level Sub Tasks</a>
+                <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/sort(id=${sister.sisterId},tid=${task.taskID},hid=${hlt.highLevelTaskID},lid=${l.lowLevelTaskID})}" class="btn btn-info">Low Level Sub Tasks</a>
             </td>
         </tr>
         </tbody>
