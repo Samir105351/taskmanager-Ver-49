@@ -4,6 +4,7 @@ import com.samir.taskmanager.Utility.NullChecker;
 import com.samir.taskmanager.entity.Task;
 import com.samir.taskmanager.entity.TaskTag;
 import com.samir.taskmanager.service.SisterService;
+import com.samir.taskmanager.service.TaskListService;
 import com.samir.taskmanager.service.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class TaskController {
     private SisterService sisterService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private TaskListService taskListService;
 
     @RequestMapping(value = "/tasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
     public String sortTasks(@RequestParam(required = false) Long id, Model model) {
@@ -88,6 +91,15 @@ public class TaskController {
             // Redirect to the previous page
             return "redirect:" + previousPage;
         }
+    }
+    @GetMapping("/tasks/{id}/view")
+    public String view(Model model,@PathVariable Long id){
+        model.addAttribute("header","Under Task Name: "+taskService.getTaskById(id).getTaskName());
+        model.addAttribute("taskList",taskListService.getTreeLists(taskService.getTaskById(id)));
+        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(taskService.getTaskById(id))));
+        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
+        return "tree/tree";
     }
 
     @RequestMapping(value = "/systems/{sid}/tasks/sort", method = {RequestMethod.GET, RequestMethod.POST})

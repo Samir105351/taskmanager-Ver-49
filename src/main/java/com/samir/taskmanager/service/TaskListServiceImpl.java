@@ -84,59 +84,154 @@ public class TaskListServiceImpl implements TaskListService {
 
         List<TaskList> subTaskLists = new ArrayList<>();
 
-            TaskList sisterTaskList = new TaskList();
-            sisterTaskList.setTaskName(sister.getSisterName());
+        List<Task> tasks = sister.getTaskList();
+        List<TaskList> taskTaskLists = new ArrayList<>();
 
-            List<Task> tasks = sister.getTaskList();
-            List<TaskList> taskTaskLists = new ArrayList<>();
+        for (Task task : tasks) {
+            TaskList taskTaskList = new TaskList();
+            taskTaskList.setTaskName(task.getTaskName());
 
-            for (Task task : tasks) {
-                TaskList taskTaskList = new TaskList();
-                taskTaskList.setTaskName(task.getTaskName());
+            List<HighLevelTask> highLevelTasks = task.getHighLevelTaskList();
+            List<TaskList> highLevelTaskLists = new ArrayList<>();
 
-                List<HighLevelTask> highLevelTasks = task.getHighLevelTaskList();
-                List<TaskList> highLevelTaskLists = new ArrayList<>();
+            for (HighLevelTask highLevelTask : highLevelTasks) {
+                TaskList highLevelTaskList = new TaskList();
+                highLevelTaskList.setTaskName(highLevelTask.getHighLevelTaskName());
 
-                for (HighLevelTask highLevelTask : highLevelTasks) {
-                    TaskList highLevelTaskList = new TaskList();
-                    highLevelTaskList.setTaskName(highLevelTask.getHighLevelTaskName());
+                List<LowLevelTask> lowLevelTasks = highLevelTask.getListLowLevelTask();
+                List<TaskList> lowLevelTaskLists = new ArrayList<>();
 
-                    List<LowLevelTask> lowLevelTasks = highLevelTask.getListLowLevelTask();
-                    List<TaskList> lowLevelTaskLists = new ArrayList<>();
+                for (LowLevelTask lowLevelTask : lowLevelTasks) {
+                    TaskList lowLevelTaskList = new TaskList();
+                    lowLevelTaskList.setTaskName(lowLevelTask.getLowLevelTaskName());
 
-                    for (LowLevelTask lowLevelTask : lowLevelTasks) {
-                        TaskList lowLevelTaskList = new TaskList();
-                        lowLevelTaskList.setTaskName(lowLevelTask.getLowLevelTaskName());
+                    List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
+                    List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
 
-                        List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
-                        List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
-
-                        for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
-                            TaskList lowLevelSubtaskList = new TaskList();
-                            lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
-                            lowLevelSubtaskLists.add(lowLevelSubtaskList);
-                        }
-
-                        lowLevelTaskList.setTaskLists(lowLevelSubtaskLists);
-                        lowLevelTaskLists.add(lowLevelTaskList);
+                    for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
+                        TaskList lowLevelSubtaskList = new TaskList();
+                        lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
+                        lowLevelSubtaskLists.add(lowLevelSubtaskList);
                     }
 
-                    highLevelTaskList.setTaskLists(lowLevelTaskLists);
-                    highLevelTaskLists.add(highLevelTaskList);
+                    lowLevelTaskList.setTaskLists(lowLevelSubtaskLists);
+                    lowLevelTaskLists.add(lowLevelTaskList);
                 }
 
-                taskTaskList.setTaskLists(highLevelTaskLists);
-                taskTaskLists.add(taskTaskList);
+                highLevelTaskList.setTaskLists(lowLevelTaskLists);
+                highLevelTaskLists.add(highLevelTaskList);
             }
 
-            sisterTaskList.setTaskLists(taskTaskLists);
-            subTaskLists.add(sisterTaskList);
+            taskTaskList.setTaskLists(highLevelTaskLists);
+            taskTaskLists.add(taskTaskList);
+        }
 
+        subTaskLists.addAll(taskTaskLists);
 
         taskList.setTaskLists(subTaskLists);
 
         return taskList;
     }
+
+    @Override
+    public TaskList getTreeLists(Task task) {
+        TaskList taskList = new TaskList();
+        taskList.setTaskName("");
+
+        TaskList taskParameterList = new TaskList();
+        taskParameterList.setTaskName(task.getTaskName());
+
+        List<HighLevelTask> highLevelTasks = task.getHighLevelTaskList();
+        List<TaskList> highLevelTaskLists = new ArrayList<>();
+
+        for (HighLevelTask highLevelTask : highLevelTasks) {
+            TaskList highLevelTaskList = new TaskList();
+            highLevelTaskList.setTaskName(highLevelTask.getHighLevelTaskName());
+
+            List<LowLevelTask> lowLevelTasks = highLevelTask.getListLowLevelTask();
+            List<TaskList> lowLevelTaskLists = new ArrayList<>();
+
+            for (LowLevelTask lowLevelTask : lowLevelTasks) {
+                TaskList lowLevelTaskList = new TaskList();
+                lowLevelTaskList.setTaskName(lowLevelTask.getLowLevelTaskName());
+
+                List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
+                List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
+
+                for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
+                    TaskList lowLevelSubtaskList = new TaskList();
+                    lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
+                    lowLevelSubtaskLists.add(lowLevelSubtaskList);
+                }
+
+                lowLevelTaskList.setTaskLists(lowLevelSubtaskLists);
+                lowLevelTaskLists.add(lowLevelTaskList);
+            }
+
+            highLevelTaskList.setTaskLists(lowLevelTaskLists);
+            highLevelTaskLists.add(highLevelTaskList);
+        }
+
+        taskList.setTaskLists(highLevelTaskLists);
+
+        return taskList;
+    }
+
+    @Override
+    public TaskList getTreeLists(HighLevelTask highLevelTask) {
+        TaskList taskList = new TaskList();
+        taskList.setTaskName("");
+
+        List<TaskList> subTaskLists = new ArrayList<>();
+
+        List<LowLevelTask> lowLevelTasks = highLevelTask.getListLowLevelTask();
+        List<TaskList> lowLevelTaskLists = new ArrayList<>();
+
+        for (LowLevelTask lowLevelTask : lowLevelTasks) {
+            TaskList lowLevelTaskList = new TaskList();
+            lowLevelTaskList.setTaskName(lowLevelTask.getLowLevelTaskName());
+
+            List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
+            List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
+
+            for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
+                TaskList lowLevelSubtaskList = new TaskList();
+                lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
+                lowLevelSubtaskLists.add(lowLevelSubtaskList);
+            }
+
+            lowLevelTaskList.setTaskLists(lowLevelSubtaskLists);
+            lowLevelTaskLists.add(lowLevelTaskList);
+        }
+
+        subTaskLists.addAll(lowLevelTaskLists);
+        taskList.setTaskLists(subTaskLists);
+
+        return taskList;
+    }
+
+    @Override
+    public TaskList getTreeLists(LowLevelTask lowLevelTask) {
+        TaskList taskList = new TaskList();
+        taskList.setTaskName("");
+
+        List<TaskList> subTaskLists = new ArrayList<>();
+
+        List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
+        List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
+
+        for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
+            TaskList lowLevelSubtaskList = new TaskList();
+            lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
+            lowLevelSubtaskLists.add(lowLevelSubtaskList);
+        }
+
+        subTaskLists.addAll(lowLevelSubtaskLists);
+        taskList.setTaskLists(subTaskLists);
+
+        return taskList;
+    }
+
 
     private String getDirectoryIndicator(int indentationLevel, boolean isLastChild) {
         StringBuilder sb = new StringBuilder();

@@ -58,6 +58,9 @@
         <br class="br-visible">
         <br class="br-visible">
         <a th:href="@{/systems/{id}/tasks/{tid}/highleveltasks/sort(id=${sister.sisterId},tid=${task.taskID})}" class="btn btn-info">High Level Tasks</a>
+        <br class="br-visible">
+        <br class="br-visible">
+        <a th:href="@{/tasks/{id}/view(id=${task.taskID})}" class="btn btn-secondary">View</a>
       </td>
     </tr>
     </tbody>

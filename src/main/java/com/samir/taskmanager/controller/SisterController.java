@@ -72,6 +72,7 @@ public class SisterController {
     }
     @GetMapping("/systems/{id}/view")
     public String view(Model model,@PathVariable Long id){
+        model.addAttribute("header","Under System Name: "+sisterService.getSisterById(id).getSisterName());
         model.addAttribute("taskList",taskListService.getTreeLists(sisterService.getSisterById(id)));
         model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(sisterService.getSisterById(id))));
         model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));

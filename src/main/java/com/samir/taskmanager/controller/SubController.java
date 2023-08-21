@@ -104,7 +104,6 @@ public class SubController {
         return "sub/sub_list_by_llt_id";
     }
 
-
     @GetMapping("highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks")
     public String getRedirectLlt(@PathVariable Long hid, @PathVariable Long lid, Model model) {
         Long t = highLevelTaskService.getHighLevelTaskById(hid).getTask().getTaskID();

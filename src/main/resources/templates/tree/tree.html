@@ -12,8 +12,10 @@
 <div th:replace="~{fragments/general.html :: headerfragment}"></div>
 
 <div th:replace="~{fragments/general.html :: navfragment}"></div>
-
-<!-- Recursive Thymeleaf fragment to handle nested task lists -->
+<div style="text-align: center; background-color: black; padding: 10px;">
+    <h1 th:text="${header}" style="max-width: 600px; margin: 0 auto; color: white;"></h1>
+</div>
+<br>
 <div th:fragment="taskListHierarchy(taskLists)">
     <ul>
         <li th:each="taskList : ${taskLists}">
@@ -24,19 +26,15 @@
         </li>
     </ul>
 </div>
-<!-- End of recursive Thymeleaf fragment -->
 
-<!-- Task list hierarchy starts here -->
 <div class="container">
     <div class="row">
-        <!-- View 1 -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body position-relative">
                     <br>
                     <br>
                     <h3 class="text-left">View 1</h3>
-                    <!-- Copy button for View 1 (Copy List) -->
                     <button class="btn btn-primary"
                             style="position: absolute; top: 10px; right: 20px;"
                             onclick="copyListToClipboard1()">
@@ -62,7 +60,6 @@
             </div>
             <div id="tooltip-list1" class="tooltip">Copied!</div>
         </div>
-        <!-- View 2 -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -74,7 +71,6 @@
                         Copy
                     </button>
                     <div id="tree1" class="bg-white p-3 rounded" style="position: relative;">
-                        <!-- Task list hierarchy starts here -->
                         <ol style="list-style-type: decimal;">
                             <li th:each="sisterTaskList : ${taskList.taskLists}">
                                 <span th:text="${sisterTaskList.taskName}"></span>
@@ -100,21 +96,17 @@
                                 </ol>
                             </li>
                         </ol>
-                        <!-- End of Task list hierarchy -->
                         <br>
                     </div>
                 </div>
             </div>
             <div id="tooltip-list2" class="tooltip">Copied!</div>
         </div>
-        <!-- View 3 -->
         <div class="col-md-6 mt-3">
             <div class="card">
                 <div class="card-body">
-                    <!-- Remove the margin from the h3 -->
                     <h3>&nbsp;</h3>
                     <h3 class="text-left mb-0">View 3</h3>
-                    <!-- Copy button for View 3 (Copy <pre>) -->
                     <button class="btn btn-primary copy-btn-top-right"
                             onclick="copyPreToClipboard('tree')">
                         Copy

@@ -5,6 +5,7 @@ import com.samir.taskmanager.entity.HighLevelTask;
 import com.samir.taskmanager.entity.TaskTag;
 import com.samir.taskmanager.service.HighLevelTaskService;
 import com.samir.taskmanager.service.SisterService;
+import com.samir.taskmanager.service.TaskListService;
 import com.samir.taskmanager.service.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class HighLevelTaskController {
     private TaskService taskService;
     @Autowired
     private HighLevelTaskService highLevelTaskService;
+    @Autowired
+    private TaskListService taskListService;
 
     @RequestMapping(value = "/highleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
     public String sortHlt(@RequestParam(required = false) Long id, Model model) {
@@ -91,6 +94,15 @@ public class HighLevelTaskController {
             // Redirect to the previous page
             return "redirect:" + previousPage;
         }
+    }
+    @GetMapping("/highleveltasks/{id}/view")
+    public String view(Model model,@PathVariable Long id){
+        model.addAttribute("header","Under High Level Task: "+highLevelTaskService.getHighLevelTaskById(id).getHighLevelTaskName());
+        model.addAttribute("taskList",taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id)));
+        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+        return "tree/tree";
     }
 
     @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})

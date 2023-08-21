@@ -20,6 +20,8 @@ public class LowLevelTaskController {
     private HighLevelTaskService highLevelTaskService;
     @Autowired
     private LowLevelTaskService lowLevelTaskService;
+    @Autowired
+    private TaskListService taskListService;
 
     @RequestMapping(value = "/lowleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
     public String sortHlt(@RequestParam(required = false) Long id, Model model) {
@@ -91,6 +93,15 @@ public class LowLevelTaskController {
         existingtaskTag.setTaskTagName("H_" + lowLevelTask.getHighLevelTask().getHighLevelTaskID());
         lowLevelTaskService.updateLowLevelTask(existingLlt);
         return "redirect:/lowleveltasks/sort";
+    }
+    @GetMapping("/lowleveltasks/{id}/view")
+    public String view(Model model,@PathVariable Long id){
+        model.addAttribute("header","Under Low Level Task: "+lowLevelTaskService.getLowLevelTaskById(id).getLowLevelTaskName());
+        model.addAttribute("taskList",taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id)));
+        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+        return "tree/tree";
     }
 
     @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})

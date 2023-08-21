@@ -12,6 +12,7 @@ public class TaskListController {
     private TaskListService taskListService;
     @GetMapping("/tree")
     public String treeThymeleaf(Model model){
+        model.addAttribute("header","List Of All Projects");
         model.addAttribute("taskList",taskListService.getTreeLists());
         model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists()));
         model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists()));
