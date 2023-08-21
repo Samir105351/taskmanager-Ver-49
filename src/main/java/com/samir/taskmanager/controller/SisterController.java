@@ -70,13 +70,14 @@ public class SisterController {
         sisterService.deleteAllSisters();
         return "redirect:/systems/sort";
     }
+
     @GetMapping("/systems/{id}/view")
-    public String view(Model model,@PathVariable Long id){
-        model.addAttribute("header","Under System Name: "+sisterService.getSisterById(id).getSisterName());
-        model.addAttribute("taskList",taskListService.getTreeLists(sisterService.getSisterById(id)));
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(sisterService.getSisterById(id))));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
+    public String view(Model model, @PathVariable Long id) {
+        model.addAttribute("header", "Under System Name: " + sisterService.getSisterById(id).getSisterName());
+        model.addAttribute("taskList", taskListService.getTreeLists(sisterService.getSisterById(id)));
+        model.addAttribute("tree", taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(sisterService.getSisterById(id))));
+        model.addAttribute("tree1", taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
+        model.addAttribute("treeStyled", taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
         return "tree/tree";
     }
 }

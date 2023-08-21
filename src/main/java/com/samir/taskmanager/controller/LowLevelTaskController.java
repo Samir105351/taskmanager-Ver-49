@@ -94,22 +94,23 @@ public class LowLevelTaskController {
         lowLevelTaskService.updateLowLevelTask(existingLlt);
         return "redirect:/lowleveltasks/sort";
     }
+
     @GetMapping("/lowleveltasks/{id}/view")
-    public String view(Model model,@PathVariable Long id){
-        model.addAttribute("header","Under Low Level Task: "+lowLevelTaskService.getLowLevelTaskById(id).getLowLevelTaskName());
-        model.addAttribute("taskList",taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id)));
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+    public String view(Model model, @PathVariable Long id) {
+        model.addAttribute("header", "Under Low Level Task: " + lowLevelTaskService.getLowLevelTaskById(id).getLowLevelTaskName());
+        model.addAttribute("taskList", taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id)));
+        model.addAttribute("tree", taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+        model.addAttribute("tree1", taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
+        model.addAttribute("treeStyled", taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(lowLevelTaskService.getLowLevelTaskById(id))));
         return "tree/tree";
     }
 
     @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
-    public String getAllHltUnderTask(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid,  @RequestParam(required = false) Long id, Model model) {
+    public String getAllHltUnderTask(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid, @RequestParam(required = false) Long id, Model model) {
         model.addAttribute("sister", sisterService.getSisterById(sid));
         model.addAttribute("task", taskService.getTaskById(tid));
         model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
-        model.addAttribute("llt", lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid,id != null ? id : 1L));
+        model.addAttribute("llt", lowLevelTaskService.getAllLltTaskTagUnderAHlt(hid, id != null ? id : 1L));
         return "llt/llt_list_by_hlt_id";
     }
 

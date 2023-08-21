@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TaskListController {
     @Autowired
     private TaskListService taskListService;
+
     @GetMapping("/tree")
-    public String treeThymeleaf(Model model){
-        model.addAttribute("header","List Of All Projects");
-        model.addAttribute("taskList",taskListService.getTreeLists());
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists()));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists()));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists()));
+    public String treeThymeleaf(Model model) {
+        model.addAttribute("header", "List Of All Projects");
+        model.addAttribute("taskList", taskListService.getTreeLists());
+        model.addAttribute("tree", taskListService.getHierarchicalTaskListString(taskListService.getTreeLists()));
+        model.addAttribute("tree1", taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists()));
+        model.addAttribute("treeStyled", taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists()));
         return "tree/tree";
     }
 }

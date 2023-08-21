@@ -94,13 +94,14 @@ public class SubController {
             return "redirect:" + previousPage;
         }
     }
+
     @RequestMapping(value = "/systems/{sid}/tasks/{tid}/highleveltasks/{hid}/lowleveltasks/{lid}/lowlevelsubtasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
     public String getAllLltUnderHlt(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @PathVariable("hid") Long hid, @PathVariable("lid") Long lid, @RequestParam(required = false) Long id, Model model) {
         model.addAttribute("sister", sisterService.getSisterById(sid));
         model.addAttribute("task", taskService.getTaskById(tid));
         model.addAttribute("hlt", highLevelTaskService.getHighLevelTaskById(hid));
         model.addAttribute("llt", lowLevelTaskService.getLowLevelTaskById(lid));
-        model.addAttribute("sub", subService.getJoinSubTaskTagByALlt(lid,id != null ? id : 1L));
+        model.addAttribute("sub", subService.getJoinSubTaskTagByALlt(lid, id != null ? id : 1L));
         return "sub/sub_list_by_llt_id";
     }
 

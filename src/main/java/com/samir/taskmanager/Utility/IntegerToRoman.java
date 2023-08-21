@@ -20,22 +20,23 @@ public class IntegerToRoman {
         roman_numerals.put("iv", 4);
         roman_numerals.put("i", 1);
         String res = "";
-        for(Map.Entry<String, Integer> entry : roman_numerals.entrySet()){
-            int matches = Int/entry.getValue();
+        for (Map.Entry<String, Integer> entry : roman_numerals.entrySet()) {
+            int matches = Int / entry.getValue();
             res += repeat(entry.getKey(), matches);
             Int = Int % entry.getValue();
         }
         return res;
     }
+
     public static String repeat(String s, int n) {
-        if(s == null) {
+        if (s == null) {
             return null;
         }
         final StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             sb.append(s);
         }
-        String roman=sb.toString();
+        String roman = sb.toString();
         return roman;
     }
 }

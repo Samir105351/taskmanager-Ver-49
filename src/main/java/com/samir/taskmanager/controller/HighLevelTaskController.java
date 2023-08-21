@@ -95,13 +95,14 @@ public class HighLevelTaskController {
             return "redirect:" + previousPage;
         }
     }
+
     @GetMapping("/highleveltasks/{id}/view")
-    public String view(Model model,@PathVariable Long id){
-        model.addAttribute("header","Under High Level Task: "+highLevelTaskService.getHighLevelTaskById(id).getHighLevelTaskName());
-        model.addAttribute("taskList",taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id)));
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+    public String view(Model model, @PathVariable Long id) {
+        model.addAttribute("header", "Under High Level Task: " + highLevelTaskService.getHighLevelTaskById(id).getHighLevelTaskName());
+        model.addAttribute("taskList", taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id)));
+        model.addAttribute("tree", taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+        model.addAttribute("tree1", taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
+        model.addAttribute("treeStyled", taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(highLevelTaskService.getHighLevelTaskById(id))));
         return "tree/tree";
     }
 
@@ -109,7 +110,7 @@ public class HighLevelTaskController {
     public String getAllHltUnderTask(@PathVariable("sid") Long sid, @PathVariable("tid") Long tid, @RequestParam(required = false) Long id, Model model) {
         model.addAttribute("sister", sisterService.getSisterById(sid));
         model.addAttribute("task", taskService.getTaskById(tid));
-        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid,id != null ? id : 1L));
+        model.addAttribute("hlt", highLevelTaskService.getAllHltTaskTagUnderATaskId(tid, id != null ? id : 1L));
         return "hlt/hlt_list_by_task_id";
     }
 

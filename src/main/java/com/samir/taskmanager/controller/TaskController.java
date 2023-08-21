@@ -92,19 +92,20 @@ public class TaskController {
             return "redirect:" + previousPage;
         }
     }
+
     @GetMapping("/tasks/{id}/view")
-    public String view(Model model,@PathVariable Long id){
-        model.addAttribute("header","Under Task Name: "+taskService.getTaskById(id).getTaskName());
-        model.addAttribute("taskList",taskListService.getTreeLists(taskService.getTaskById(id)));
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(taskService.getTaskById(id))));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
+    public String view(Model model, @PathVariable Long id) {
+        model.addAttribute("header", "Under Task Name: " + taskService.getTaskById(id).getTaskName());
+        model.addAttribute("taskList", taskListService.getTreeLists(taskService.getTaskById(id)));
+        model.addAttribute("tree", taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(taskService.getTaskById(id))));
+        model.addAttribute("tree1", taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
+        model.addAttribute("treeStyled", taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(taskService.getTaskById(id))));
         return "tree/tree";
     }
 
     @RequestMapping(value = "/systems/{sid}/tasks/sort", method = {RequestMethod.GET, RequestMethod.POST})
-    public String getAllTasksUnderSystems(@PathVariable("sid") Long sid,@RequestParam(required = false) Long id, Model model) {
-        model.addAttribute("tasks", taskService.getAllTaskTaskTagUnderASisterId(sid,id != null ? id : 1L));
+    public String getAllTasksUnderSystems(@PathVariable("sid") Long sid, @RequestParam(required = false) Long id, Model model) {
+        model.addAttribute("tasks", taskService.getAllTaskTaskTagUnderASisterId(sid, id != null ? id : 1L));
         model.addAttribute("sister", sisterService.getSisterById(sid));
         return "task/task_list_by_system_id";
     }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 @Service
 public class TaskListServiceImpl implements TaskListService {
     @Autowired
@@ -267,6 +268,7 @@ public class TaskListServiceImpl implements TaskListService {
             }
         }
     }
+
     @Override
     public String getHierarchicalTaskListStringWithStyle(TaskList rootTaskList) {
         StringBuilder resultBuilder = new StringBuilder();
@@ -300,12 +302,12 @@ public class TaskListServiceImpl implements TaskListService {
             counters[2]++;
             counters[3] = 1;
         } else if (indentationLevel == 4) {
-            String s=IntegerToRoman.RomanNumerals(counters[3]);
-            int l=IntegerToRoman.RomanNumerals(counters[3]).length();
-            for(int i=0;i<4-l;i++){
-                s =" "+ s;
+            String s = IntegerToRoman.RomanNumerals(counters[3]);
+            int l = IntegerToRoman.RomanNumerals(counters[3]).length();
+            for (int i = 0; i < 4 - l; i++) {
+                s = " " + s;
             }
-            prefix= s + ". ";
+            prefix = s + ". ";
             counters[3]++;
         } else {
             prefix = "    • ";
@@ -319,6 +321,7 @@ public class TaskListServiceImpl implements TaskListService {
             }
         }
     }
+
     @Override
     public String getHirearchicalTaskListStringWithAnotherStyle(TaskList rootTaskList) {
         StringBuilder resultBuilder = new StringBuilder();
