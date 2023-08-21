@@ -15,7 +15,7 @@ public class TaskListServiceImpl implements TaskListService {
     private SisterRepository sisterRepository;
 
     @Override
-    public TaskList getTaskLists() {
+    public TaskList getTreeLists() {
         TaskList taskList = new TaskList();
         taskList.setTaskName("");
 
@@ -77,19 +77,79 @@ public class TaskListServiceImpl implements TaskListService {
         return taskList;
     }
 
-    // Helper method to get directory indicators based on the indentation level and last child status
+    @Override
+    public TaskList getTreeLists(Sister sister) {
+        TaskList taskList = new TaskList();
+        taskList.setTaskName("");
+
+        List<TaskList> subTaskLists = new ArrayList<>();
+
+            TaskList sisterTaskList = new TaskList();
+            sisterTaskList.setTaskName(sister.getSisterName());
+
+            List<Task> tasks = sister.getTaskList();
+            List<TaskList> taskTaskLists = new ArrayList<>();
+
+            for (Task task : tasks) {
+                TaskList taskTaskList = new TaskList();
+                taskTaskList.setTaskName(task.getTaskName());
+
+                List<HighLevelTask> highLevelTasks = task.getHighLevelTaskList();
+                List<TaskList> highLevelTaskLists = new ArrayList<>();
+
+                for (HighLevelTask highLevelTask : highLevelTasks) {
+                    TaskList highLevelTaskList = new TaskList();
+                    highLevelTaskList.setTaskName(highLevelTask.getHighLevelTaskName());
+
+                    List<LowLevelTask> lowLevelTasks = highLevelTask.getListLowLevelTask();
+                    List<TaskList> lowLevelTaskLists = new ArrayList<>();
+
+                    for (LowLevelTask lowLevelTask : lowLevelTasks) {
+                        TaskList lowLevelTaskList = new TaskList();
+                        lowLevelTaskList.setTaskName(lowLevelTask.getLowLevelTaskName());
+
+                        List<LowLevelSubTask> lowLevelSubtasks = lowLevelTask.getLowLevelSubTaskList();
+                        List<TaskList> lowLevelSubtaskLists = new ArrayList<>();
+
+                        for (LowLevelSubTask lowLevelSubtask : lowLevelSubtasks) {
+                            TaskList lowLevelSubtaskList = new TaskList();
+                            lowLevelSubtaskList.setTaskName(lowLevelSubtask.getLowLevelSubTaskName());
+                            lowLevelSubtaskLists.add(lowLevelSubtaskList);
+                        }
+
+                        lowLevelTaskList.setTaskLists(lowLevelSubtaskLists);
+                        lowLevelTaskLists.add(lowLevelTaskList);
+                    }
+
+                    highLevelTaskList.setTaskLists(lowLevelTaskLists);
+                    highLevelTaskLists.add(highLevelTaskList);
+                }
+
+                taskTaskList.setTaskLists(highLevelTaskLists);
+                taskTaskLists.add(taskTaskList);
+            }
+
+            sisterTaskList.setTaskLists(taskTaskLists);
+            subTaskLists.add(sisterTaskList);
+
+
+        taskList.setTaskLists(subTaskLists);
+
+        return taskList;
+    }
+
     private String getDirectoryIndicator(int indentationLevel, boolean isLastChild) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < indentationLevel; i++) {
-            sb.append("  | "); // Use vertical bars for intermediate levels (two spaces and a vertical bar for each level)
+            sb.append("  | ");
         }
 
-        sb.append(indentationLevel > 0 ? (isLastChild ? "  └─  " : "  ├─  ") : sb.append(" ")); // Use appropriate ASCII characters for arrows
+        sb.append(indentationLevel > 0 ? (isLastChild ? "  └─  " : "  ├─  ") : sb.append(" "));
 
         return sb.toString();
     }
 
-    // New method to get the hierarchical task list as a string using DFS
+
     public String getHierarchicalTaskListString(TaskList rootTaskList) {
         Set<TaskList> visited = new HashSet<>();
         StringBuilder resultBuilder = new StringBuilder();
@@ -97,7 +157,7 @@ public class TaskListServiceImpl implements TaskListService {
         return resultBuilder.toString();
     }
 
-    // Helper method for generating the hierarchical task list string using DFS
+
     private void getHierarchicalTaskListStringHelper(TaskList taskList, Set<TaskList> visited, int indentationLevel, StringBuilder resultBuilder) {
         visited.add(taskList);
         resultBuilder.append(taskList.getTaskName()).append("\n");

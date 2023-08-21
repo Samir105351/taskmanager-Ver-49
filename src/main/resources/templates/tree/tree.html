@@ -50,7 +50,6 @@
                                     <li th:each="taskTaskList : ${sisterTaskList.taskLists}" class="nested-list">
                                         <span th:text="${taskTaskList.taskName}"></span>
                                         <ul th:if="${taskTaskList.taskLists}" class="nested-list">
-                                            <!-- Recursive fragment to display high-level and low-level tasks -->
                                             <li th:replace="~{tree/childTaskList :: taskListHierarchy(taskLists=${taskTaskList.taskLists})}"></li>
                                         </ul>
                                     </li>
@@ -70,7 +69,6 @@
                     <br>
                     <br>
                     <h3 class="text-left">View 2</h3>
-                    <!-- Copy button for View 2 (Copy List) -->
                     <button class="btn btn-primary copy-btn-top-right"
                             onclick="copyListToClipboard2()">
                         Copy

@@ -12,10 +12,10 @@ public class TaskListController {
     private TaskListService taskListService;
     @GetMapping("/tree")
     public String treeThymeleaf(Model model){
-        model.addAttribute("taskList",taskListService.getTaskLists());
-        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTaskLists()));
-        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTaskLists()));
-        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTaskLists()));
+        model.addAttribute("taskList",taskListService.getTreeLists());
+        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists()));
+        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists()));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists()));
         return "tree/tree";
     }
 }

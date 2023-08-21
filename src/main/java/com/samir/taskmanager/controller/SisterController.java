@@ -2,6 +2,7 @@ package com.samir.taskmanager.controller;
 
 import com.samir.taskmanager.entity.Sister;
 import com.samir.taskmanager.service.SisterService;
+import com.samir.taskmanager.service.TaskListService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class SisterController {
     @Autowired
     private SisterService sisterService;
+    @Autowired
+    private TaskListService taskListService;
 
     @RequestMapping(value = "/systems/sort", method = {RequestMethod.GET, RequestMethod.POST})
     public String systemPage(@RequestParam(required = false) String sortBy, Model model) {
@@ -66,5 +69,13 @@ public class SisterController {
     public String deleteStudent() {
         sisterService.deleteAllSisters();
         return "redirect:/systems/sort";
+    }
+    @GetMapping("/systems/{id}/view")
+    public String view(Model model,@PathVariable Long id){
+        model.addAttribute("taskList",taskListService.getTreeLists(sisterService.getSisterById(id)));
+        model.addAttribute("tree",taskListService.getHierarchicalTaskListString(taskListService.getTreeLists(sisterService.getSisterById(id))));
+        model.addAttribute("tree1",taskListService.getHierarchicalTaskListStringWithStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
+        model.addAttribute("treeStyled",taskListService.getHirearchicalTaskListStringWithAnotherStyle(taskListService.getTreeLists(sisterService.getSisterById(id))));
+        return "tree/tree";
     }
 }
